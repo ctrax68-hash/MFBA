@@ -154,6 +154,47 @@
   .empty-state { color: var(--muted); font-size: 13px; padding: 10px 0; }
   .col-actions { white-space: nowrap; }
   footer { text-align: center; color: var(--muted); font-size: 12px; padding: 20px; }
+
+  @media (max-width: 640px) {
+    table.stack-table thead { display: none; }
+    table.stack-table tbody tr.clickable,
+    table.stack-table tbody tr.plainrow,
+    table.stack-table tbody tr.grandtotal {
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+    }
+    table.stack-table tbody tr.clickable td,
+    table.stack-table tbody tr.plainrow td,
+    table.stack-table tbody tr.grandtotal td {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border: none;
+      padding: 3px 0;
+    }
+    table.stack-table tbody tr td:first-child {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    table.stack-table tbody tr td:first-child::before { content: none; }
+    table.stack-table tbody td[data-label]::before {
+      content: attr(data-label);
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+    table.stack-table tbody tr.drillrow {
+      display: block;
+    }
+    table.stack-table tbody tr.drillrow td {
+      display: block;
+    }
+    table.stack-table tbody tr:nth-child(even) { background: none; }
+  }
 </style>
 </head>
 <body>
@@ -228,7 +269,7 @@
 
       <h3>Preview</h3>
       <div style="overflow-x:auto">
-        <table id="previewTable"><thead></thead><tbody></tbody></table>
+        <table id="previewTable" class="stack-table"><thead></thead><tbody></tbody></table>
       </div>
       <div class="row" style="margin-top:12px">
         <span class="muted" id="previewTotals"></span>
@@ -244,7 +285,7 @@
       <div id="excludedSection"></div>
       <h3>Vendor Totals</h3>
       <div style="overflow-x:auto">
-        <table id="vendorTable"><thead></thead><tbody></tbody></table>
+        <table id="vendorTable" class="stack-table"><thead></thead><tbody></tbody></table>
       </div>
       <div class="row" style="margin-top:16px; justify-content:space-between">
         <div class="row">
@@ -784,10 +825,10 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
     tbody.innerHTML = "";
     var sample = cur.transactions.slice(0, 12);
     sample.forEach(function (t) {
-      tbody.appendChild(el("tr", {}, [
+      tbody.appendChild(el("tr", { class: "plainrow" }, [
         el("td", { text: fmtDate(t.date) }),
-        el("td", { text: t.description }),
-        el("td", { class: "num", text: fmtMoney(t.amount) })
+        el("td", { "data-label": "Description", text: t.description }),
+        el("td", { class: "num", "data-label": "Amount", text: fmtMoney(t.amount) })
       ]));
     });
     if (!sample.length) {
@@ -930,7 +971,7 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
     var keys = Object.keys(excludedGroups);
     if (!keys.length) return;
     wrap.appendChild(el("h3", { text: "Excluded from vendor totals (payments, interest, fees)" }));
-    var table = el("table");
+    var table = el("table", { class: "stack-table" });
     var thead = el("thead", {}, [el("tr", {}, [
       el("th", { text: "Description" }), el("th", { class: "num", text: "Count" }),
       el("th", { class: "num", text: "Charges" }), el("th", { class: "num", text: "Credits" }), el("th", { class: "num", text: "Net" })
@@ -940,16 +981,16 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
     keys.sort().forEach(function (name) {
       var g = excludedGroups[name];
       totC += g.charges; totCr += g.credits;
-      tbody.appendChild(el("tr", {}, [
-        el("td", { text: name }), el("td", { class: "num", text: String(g.count) }),
-        el("td", { class: "num", text: fmtMoney(g.charges) }), el("td", { class: "num", text: fmtMoney(g.credits) }),
-        el("td", { class: "num", text: fmtMoney(g.charges + g.credits) })
+      tbody.appendChild(el("tr", { class: "plainrow" }, [
+        el("td", { text: name }), el("td", { class: "num", "data-label": "Count", text: String(g.count) }),
+        el("td", { class: "num", "data-label": "Charges", text: fmtMoney(g.charges) }), el("td", { class: "num", "data-label": "Credits", text: fmtMoney(g.credits) }),
+        el("td", { class: "num", "data-label": "Net", text: fmtMoney(g.charges + g.credits) })
       ]));
     });
     tbody.appendChild(el("tr", { class: "grandtotal" }, [
-      el("td", { text: "Total" }), el("td", { class: "num", text: "" }),
-      el("td", { class: "num", text: fmtMoney(totC) }), el("td", { class: "num", text: fmtMoney(totCr) }),
-      el("td", { class: "num", text: fmtMoney(totC + totCr) })
+      el("td", { text: "Total" }), el("td", { class: "num", "data-label": "Count", text: "" }),
+      el("td", { class: "num", "data-label": "Charges", text: fmtMoney(totC) }), el("td", { class: "num", "data-label": "Credits", text: fmtMoney(totCr) }),
+      el("td", { class: "num", "data-label": "Net", text: fmtMoney(totC + totCr) })
     ]));
     table.appendChild(thead); table.appendChild(tbody);
     wrap.appendChild(table);
@@ -975,12 +1016,12 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
       var g = vendorGroups[name];
       totC += g.charges; totCr += g.credits;
       var tr = el("tr", { class: "clickable" }, [
-        el("td", { text: name }), el("td", { class: "num", text: String(g.count) }),
-        el("td", { class: "num", text: fmtMoney(g.charges) }), el("td", { class: "num", text: fmtMoney(g.credits) }),
-        el("td", { class: "num", text: fmtMoney(g.charges + g.credits) })
+        el("td", { text: name }), el("td", { class: "num", "data-label": "Count", text: String(g.count) }),
+        el("td", { class: "num", "data-label": "Charges", text: fmtMoney(g.charges) }), el("td", { class: "num", "data-label": "Credits", text: fmtMoney(g.credits) }),
+        el("td", { class: "num", "data-label": "Net", text: fmtMoney(g.charges + g.credits) })
       ]);
       var drillOpen = false;
-      var drillRow = el("tr", { class: "hidden" }, [el("td", { colspan: "5" }, [buildDrillDown(g.rows)])]);
+      var drillRow = el("tr", { class: "hidden drillrow" }, [el("td", { colspan: "5" }, [buildDrillDown(g.rows)])]);
       tr.addEventListener("click", function () {
         drillOpen = !drillOpen;
         drillRow.classList.toggle("hidden", !drillOpen);
@@ -989,9 +1030,9 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
       tbody.appendChild(drillRow);
     });
     tbody.appendChild(el("tr", { class: "grandtotal" }, [
-      el("td", { text: "Grand Total" }), el("td", { class: "num", text: "" }),
-      el("td", { class: "num", text: fmtMoney(totC) }), el("td", { class: "num", text: fmtMoney(totCr) }),
-      el("td", { class: "num", text: fmtMoney(totC + totCr) })
+      el("td", { text: "Grand Total" }), el("td", { class: "num", "data-label": "Count", text: "" }),
+      el("td", { class: "num", "data-label": "Charges", text: fmtMoney(totC) }), el("td", { class: "num", "data-label": "Credits", text: fmtMoney(totCr) }),
+      el("td", { class: "num", "data-label": "Net", text: fmtMoney(totC + totCr) })
     ]));
   }
 
