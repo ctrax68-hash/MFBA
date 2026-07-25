@@ -6,35 +6,49 @@
 <title>Vendor Reconciliation</title>
 <style>
   :root {
-    --bg: #f6f7f9;
-    --panel: #ffffff;
-    --border: #dde1e6;
-    --text: #1f2430;
-    --muted: #6b7280;
-    --accent: #2563eb;
-    --accent-dark: #1d4ed8;
-    --danger: #dc2626;
-    --danger-bg: #fef2f2;
-    --warn-bg: #fffbeb;
-    --warn-border: #f59e0b;
-    --ok-bg: #f0fdf4;
-    --row-alt: #fafbfc;
+    color-scheme: light;
+    --bg: #f9f9f7;
+    --panel: #fcfcfb;
+    --border: rgba(11,11,11,0.10);
+    --hairline: #e1e0d9;
+    --text: #0b0b0b;
+    --muted: #52514e;
+    --accent: #4a3aa7;
+    --accent-dark: #3a2d86;
+    --accent-tint: rgba(74,58,167,0.09);
+    --good: #0ca30c;
+    --good-tint: rgba(12,163,12,0.10);
+    --warning: #fab219;
+    --warn-bg: #fff8e6;
+    --warn-border: #fab219;
+    --danger: #d03b3b;
+    --danger-bg: #fdeceb;
+    --row-alt: #f4f3f0;
+    --shadow: 0 1px 2px rgba(11,11,11,.04), 0 8px 24px rgba(11,11,11,.06);
+    --shadow-sm: 0 1px 2px rgba(11,11,11,.06);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #14171c;
-      --panel: #1c2028;
-      --border: #2c313b;
-      --text: #e6e8eb;
-      --muted: #9aa2af;
-      --accent: #4b8bff;
-      --accent-dark: #3b74e0;
-      --danger: #f87171;
-      --danger-bg: #3a1f22;
-      --warn-bg: #3a3220;
-      --warn-border: #d99a1f;
-      --ok-bg: #16301f;
-      --row-alt: #20242c;
+      color-scheme: dark;
+      --bg: #0d0d0d;
+      --panel: #1a1a19;
+      --border: rgba(255,255,255,0.10);
+      --hairline: #2c2c2a;
+      --text: #ffffff;
+      --muted: #c3c2b7;
+      --accent: #9085e9;
+      --accent-dark: #ada4ee;
+      --accent-tint: rgba(144,133,233,0.14);
+      --good: #0ca30c;
+      --good-tint: rgba(12,163,12,0.16);
+      --warning: #fab219;
+      --warn-bg: #2c2408;
+      --warn-border: #fab219;
+      --danger: #e66767;
+      --danger-bg: #3a1f1f;
+      --row-alt: #202020;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px rgba(0,0,0,.35);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
     }
   }
   * { box-sizing: border-box; }
@@ -45,29 +59,48 @@
     color: var(--text);
   }
   header {
-    padding: 20px 28px 8px;
+    padding: 28px 28px 6px;
   }
-  header h1 { margin: 0 0 2px; font-size: 20px; }
+  header h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    background: linear-gradient(90deg, var(--text), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
   header p { margin: 0; color: var(--muted); font-size: 13px; }
   nav.tabs {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     display: flex;
     gap: 4px;
-    padding: 0 28px;
+    padding: 10px 24px;
+    margin: 14px 0 0;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
-    margin-top: 14px;
   }
   nav.tabs button {
     background: none;
     border: none;
-    padding: 10px 16px;
-    font-size: 14px;
+    padding: 8px 16px;
+    font-size: 13.5px;
+    font-weight: 500;
     cursor: pointer;
     color: var(--muted);
-    border-bottom: 2px solid transparent;
+    border-radius: 999px;
+    transition: background .15s ease, color .15s ease;
   }
+  nav.tabs button:hover { background: var(--accent-tint); color: var(--text); }
   nav.tabs button.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
+    color: #fff;
+    background: var(--accent);
     font-weight: 600;
   }
   main { padding: 20px 28px 60px; max-width: 1100px; margin: 0 auto; }
@@ -76,12 +109,13 @@
   .panel {
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 20px;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
     margin-bottom: 18px;
   }
-  .panel h2 { margin: 0 0 12px; font-size: 15px; }
-  .panel h3 { margin: 16px 0 8px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .panel h2 { margin: 0 0 12px; font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+  .panel h3 { margin: 18px 0 8px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
   .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .field { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
   .field label { color: var(--muted); }
@@ -89,70 +123,110 @@
     background: var(--bg);
     border: 1px solid var(--border);
     color: var(--text);
-    border-radius: 6px;
-    padding: 6px 8px;
+    border-radius: 8px;
+    padding: 7px 10px;
     font-size: 13px;
   }
+  select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
   button {
     background: var(--accent);
     color: #fff;
     border: none;
-    border-radius: 6px;
-    padding: 7px 14px;
+    border-radius: 8px;
+    padding: 8px 16px;
     font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
   }
-  button:hover { background: var(--accent-dark); }
+  button:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,.12); }
+  button:active { transform: translateY(0); }
   button.secondary {
     background: transparent;
     color: var(--text);
     border: 1px solid var(--border);
+    box-shadow: none;
   }
-  button.secondary:hover { background: var(--row-alt); }
+  button.secondary:hover { background: var(--row-alt); box-shadow: none; }
   button.link {
     background: none;
     color: var(--accent);
     padding: 2px 6px;
+    box-shadow: none;
+    font-weight: 600;
   }
-  button.link:hover { background: none; text-decoration: underline; }
+  button.link:hover { background: none; text-decoration: underline; transform: none; box-shadow: none; }
   button.danger { background: var(--danger); }
-  button.danger:hover { background: #b91c1c; }
-  button:disabled { opacity: .5; cursor: not-allowed; }
+  button.danger:hover { background: #b52f2f; }
+  button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--border); }
-  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; cursor: pointer; user-select: none; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; cursor: pointer; user-select: none; }
   tbody tr:nth-child(even) { background: var(--row-alt); }
-  tbody tr.clickable { cursor: pointer; }
-  tbody tr.clickable:hover { background: var(--warn-bg); }
+  tbody tr.clickable { cursor: pointer; transition: background .12s ease; }
+  tbody tr.clickable:hover { background: var(--accent-tint); }
+  tbody tr.clickable.entered { background: var(--good-tint); }
+  tbody tr.clickable.entered:hover { background: var(--good-tint); filter: brightness(0.97); }
+  .vendor-name { font-weight: 600; }
+  .entered-check {
+    display: inline-block;
+    width: 16px; height: 16px;
+    line-height: 15px;
+    text-align: center;
+    border-radius: 999px;
+    border: 1.5px solid var(--border);
+    color: transparent;
+    font-size: 11px;
+    margin-right: 7px;
+    vertical-align: -2px;
+  }
+  tr.entered .entered-check {
+    background: var(--good);
+    border-color: var(--good);
+    color: #fff;
+  }
+  .details-link { font-size: 11.5px; font-weight: 500; padding: 0; margin-top: 2px; }
   td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   tr.grandtotal td { font-weight: 700; border-top: 2px solid var(--border); }
   .badge {
     display: inline-block;
     font-size: 11px;
-    padding: 2px 7px;
+    padding: 2px 8px;
     border-radius: 999px;
     background: var(--row-alt);
     color: var(--muted);
     border: 1px solid var(--border);
   }
-  .badge.warn { background: var(--warn-bg); border-color: var(--warn-border); color: #92650b; }
-  .badge.ok { background: var(--ok-bg); color: #16803d; border-color: #86e0a8; }
+  .badge.warn { background: var(--warn-bg); border-color: var(--warn-border); color: #8a5c00; }
+  .badge.ok { background: var(--good-tint); color: var(--good); border-color: var(--good); }
   .callout {
     border: 1px solid var(--warn-border);
     background: var(--warn-bg);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 12px 14px;
     margin-bottom: 14px;
     font-size: 13px;
   }
   .callout.danger { border-color: var(--danger); background: var(--danger-bg); }
   .muted { color: var(--muted); }
-  .drill { background: var(--bg); border-radius: 6px; margin: 4px 0 10px; padding: 6px 10px; }
+  .drill { background: var(--bg); border-radius: 8px; margin: 4px 0 10px; padding: 6px 10px; }
   .drill table { font-size: 12px; }
   .rule-form { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; margin-top: 10px; }
   .hidden { display: none !important; }
   .empty-state { color: var(--muted); font-size: 13px; padding: 10px 0; }
   .col-actions { white-space: nowrap; }
+  .stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .stat-tile {
+    flex: 1 1 160px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .stat-tile .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+  .stat-tile .stat-value { font-size: 22px; font-weight: 700; margin-top: 4px; letter-spacing: -.01em; }
+  .stat-tile.accent { border-color: var(--accent); background: var(--accent-tint); }
   footer { text-align: center; color: var(--muted); font-size: 12px; padding: 20px; }
 
   @media (max-width: 640px) {
@@ -178,6 +252,7 @@
     table.stack-table tbody tr td:first-child {
       font-weight: 600;
       font-size: 14px;
+      display: block;
     }
     table.stack-table tbody tr td:first-child::before { content: none; }
     table.stack-table tbody td[data-label]::before {
@@ -281,9 +356,11 @@
 
     <div class="panel hidden" id="reviewPanel">
       <h2>3. Review vendor totals</h2>
+      <div id="statTiles" class="stat-row"></div>
       <div id="unmappedSection"></div>
       <div id="excludedSection"></div>
       <h3>Vendor Totals</h3>
+      <p class="muted" style="margin:0 0 10px">Click a vendor to mark it entered into your books. Use "Details" to view its transactions.</p>
       <div style="overflow-x:auto">
         <table id="vendorTable" class="stack-table"><thead></thead><tbody></tbody></table>
       </div>
@@ -648,10 +725,13 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
       sheetsMap: sheetsMap,
       sheetNames: sheetNames,
       activeSheet: bestName,
-      transactions: null
+      transactions: null,
+      enteredVendors: new Set(),
+      editingStatementId: null
     };
     document.getElementById("mappingPanel").classList.remove("hidden");
     document.getElementById("reviewPanel").classList.add("hidden");
+    updateSaveButtonLabel();
     applySheetSelection(bestName, bestDetect);
   }
 
@@ -891,13 +971,56 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
     renderReview();
   }
 
+  function openStatementForReview(statementId) {
+    var s = state.statements.find(function (s) { return s.id === statementId; });
+    if (!s) return;
+    state.current = {
+      sourceFile: s.sourceFile,
+      transactions: s.transactions.map(function (t) {
+        return { date: t.date ? new Date(t.date) : null, description: t.description, amount: t.amount, vendor: t.vendor, excluded: t.excluded, unmapped: t.unmapped };
+      }),
+      enteredVendors: new Set(s.enteredVendors || []),
+      editingStatementId: s.id
+    };
+    document.getElementById("mappingPanel").classList.add("hidden");
+    document.getElementById("reviewPanel").classList.remove("hidden");
+    document.getElementById("statementLabel").value = s.label;
+    updateSaveButtonLabel();
+    document.querySelectorAll(".tabbtn").forEach(function (b) { b.classList.toggle("active", b.dataset.tab === "import"); });
+    document.querySelectorAll(".tabpanel").forEach(function (p) { p.classList.toggle("active", p.id === "tab-import"); });
+    renderReview();
+    document.getElementById("reviewPanel").scrollIntoView({ behavior: "smooth" });
+  }
+
   function renderReview() {
     var txs = state.current.transactions;
     var groups = groupTransactions(txs);
     state.current.groups = groups;
+    renderStatTiles(groups.vendorGroups);
     renderUnmapped(groups.unmappedGroups);
     renderExcluded(groups.excludedGroups);
     renderVendorTable(groups.vendorGroups);
+  }
+
+  function renderStatTiles(vendorGroups) {
+    var wrap = document.getElementById("statTiles");
+    wrap.innerHTML = "";
+    var charges = 0, credits = 0;
+    Object.keys(vendorGroups).forEach(function (name) {
+      charges += vendorGroups[name].charges;
+      credits += vendorGroups[name].credits;
+    });
+    var tiles = [
+      { label: "Total charges", value: fmtMoney(charges) },
+      { label: "Total credits", value: fmtMoney(credits) },
+      { label: "Net", value: fmtMoney(charges + credits), accent: true }
+    ];
+    tiles.forEach(function (t) {
+      wrap.appendChild(el("div", { class: "stat-tile" + (t.accent ? " accent" : "") }, [
+        el("div", { class: "stat-label", text: t.label }),
+        el("div", { class: "stat-value", text: t.value })
+      ]));
+    });
   }
 
   function allVendorNames() {
@@ -1015,14 +1138,27 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
     names.forEach(function (name) {
       var g = vendorGroups[name];
       totC += g.charges; totCr += g.credits;
-      var tr = el("tr", { class: "clickable" }, [
-        el("td", { text: name }), el("td", { class: "num", "data-label": "Count", text: String(g.count) }),
+      var isEntered = state.current.enteredVendors.has(name);
+      var detailsBtn = el("button", { class: "link details-link", type: "button", text: "Details ▾" });
+      var vendorCell = el("td", {}, [
+        el("span", { class: "entered-check", text: "✓" }),
+        el("span", { class: "vendor-name", text: name }),
+        el("div", {}, [detailsBtn])
+      ]);
+      var tr = el("tr", { class: "clickable" + (isEntered ? " entered" : "") }, [
+        vendorCell, el("td", { class: "num", "data-label": "Count", text: String(g.count) }),
         el("td", { class: "num", "data-label": "Charges", text: fmtMoney(g.charges) }), el("td", { class: "num", "data-label": "Credits", text: fmtMoney(g.credits) }),
         el("td", { class: "num", "data-label": "Net", text: fmtMoney(g.charges + g.credits) })
       ]);
       var drillOpen = false;
       var drillRow = el("tr", { class: "hidden drillrow" }, [el("td", { colspan: "5" }, [buildDrillDown(g.rows)])]);
       tr.addEventListener("click", function () {
+        if (state.current.enteredVendors.has(name)) state.current.enteredVendors.delete(name);
+        else state.current.enteredVendors.add(name);
+        tr.classList.toggle("entered");
+      });
+      detailsBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
         drillOpen = !drillOpen;
         drillRow.classList.toggle("hidden", !drillOpen);
       });
@@ -1057,10 +1193,10 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
   document.getElementById("exportVendorCsv").addEventListener("click", function () {
     var groups = state.current.groups;
     if (!groups) return;
-    var rows = [["Vendor", "Count", "Charges", "Credits", "Net"]];
+    var rows = [["Vendor", "Count", "Charges", "Credits", "Net", "Entered"]];
     Object.keys(groups.vendorGroups).sort().forEach(function (name) {
       var g = groups.vendorGroups[name];
-      rows.push([name, g.count, g.charges.toFixed(2), g.credits.toFixed(2), (g.charges + g.credits).toFixed(2)]);
+      rows.push([name, g.count, g.charges.toFixed(2), g.credits.toFixed(2), (g.charges + g.credits).toFixed(2), state.current.enteredVendors.has(name) ? "Yes" : "No"]);
     });
     downloadBlob("vendor-summary.csv", rowsToCsv(rows), "text/csv");
   });
@@ -1074,18 +1210,33 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
     downloadBlob("transaction-detail.csv", rowsToCsv(rows), "text/csv");
   });
 
+  function updateSaveButtonLabel() {
+    var btn = document.getElementById("saveStatementBtn");
+    var editing = state.current && state.current.editingStatementId;
+    btn.textContent = editing ? "Update Statement" : "Save Statement to History";
+  }
+
   document.getElementById("saveStatementBtn").addEventListener("click", function () {
     if (!state.current || !state.current.transactions) return;
     var label = document.getElementById("statementLabel").value.trim() || state.current.sourceFile;
-    state.statements.push({
-      id: "s_" + Math.random().toString(36).slice(2, 10),
+    var record = {
+      id: state.current.editingStatementId || ("s_" + Math.random().toString(36).slice(2, 10)),
       label: label,
       sourceFile: state.current.sourceFile,
       importedAt: new Date().toISOString(),
       transactions: state.current.transactions.map(function (t) {
         return { date: t.date ? t.date.toISOString() : null, description: t.description, amount: t.amount, vendor: t.vendor, excluded: t.excluded, unmapped: t.unmapped };
-      })
-    });
+      }),
+      enteredVendors: Array.from(state.current.enteredVendors)
+    };
+    if (state.current.editingStatementId) {
+      var idx = state.statements.findIndex(function (s) { return s.id === state.current.editingStatementId; });
+      if (idx !== -1) state.statements[idx] = record; else state.statements.push(record);
+    } else {
+      state.current.editingStatementId = record.id;
+      state.statements.push(record);
+    }
+    updateSaveButtonLabel();
     saveStatements();
     renderHistoryTab();
     fileStatus.textContent = "Saved \"" + label + "\" to history.";
@@ -1204,7 +1355,10 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
           el("td", { text: s.label }), el("td", { text: s.sourceFile }),
           el("td", { text: new Date(s.importedAt).toLocaleDateString() }),
           el("td", { class: "num", text: String(s.transactions.length) }),
-          el("td", {}, [el("button", { class: "link", text: "Delete", onclick: function () { deleteStatement(s.id); } })])
+          el("td", { class: "col-actions" }, [
+            el("button", { class: "link", text: "Review", onclick: function () { openStatementForReview(s.id); } }),
+            el("button", { class: "link", text: "Delete", onclick: function () { deleteStatement(s.id); } })
+          ])
         ]));
       });
       table.appendChild(tbody);
